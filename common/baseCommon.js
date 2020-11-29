@@ -20,12 +20,9 @@ var header={
 	apiToken:"",
 	cid:"",
 	"Access-Control-Allow-Origin":"*",
-	"Access-Control-Allow-Methods":"POST, GET, PUT, OPTIONS, DELETE",
-	setHeader:function(user){
-		this.apiToken=user.apiToken
-		this.cid=user.cid
+	"Access-Control-Allow-Methods":"POST, GET, PUT, OPTIONS, DELETE"
 	}
-}
+
 export default {
 	requestSuccessStatus,
 	apiTokenInvalid,
@@ -35,7 +32,23 @@ export default {
 	apiFileRead,
 	baseUrl,
 	userSite,
-	header,
 	isLogin,
-	loginAgain
-}
+	loginAgain,	
+	baserRequest:{
+			data:{},
+			request:function(url,data,method,func){
+				let that=this;
+				uni.request({
+				url:baseUrl+url,
+				method:method,
+				data:data,
+				header:header,
+				complete:func
+				})
+				}
+	},
+	setHeader:function(user){
+		this.apiToken="Bearer "+user.apiToken
+		this.cid=user.cid
+	}
+	}
