@@ -8,9 +8,9 @@
 			}
 		},
 		{
-			"path": "pages/tabBar/component/component",
+			"path": "pages/UserInfo/UserInfo",
 			"style": {
-				"navigationBarTitleText": "内置组件",
+				"navigationBarTitleText": "我的",
 				"app-plus": {
 					"bounce": "vertical",
 					"titleNView": {
@@ -315,7 +315,17 @@
 				"navigationBarTitleText": "问题反馈"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/UserInfo/UserInfo",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        
+    ],
 	"subPackages": [{
 			"root": "pages/API",
 			"pages": [{
@@ -1189,10 +1199,10 @@
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
 		"list": [{
-				"pagePath": "pages/tabBar/component/component",
+				"pagePath": "pages/UserInfo/UserInfo",
 				"iconPath": "static/component.png",
 				"selectedIconPath": "static/componentHL.png",
-				"text": "内置组件"
+				"text": "我的"
 			},
 			{
 				"pagePath": "pages/tabBar/API/API",

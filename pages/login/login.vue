@@ -23,7 +23,6 @@
 </template>
 
 <script>
-	import base from '../../common/baseCommon.js'
 	export default {
 		data() {
 			return {
@@ -32,32 +31,35 @@
 			login_logo:"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3355161828,1088477055&fm=26&gp=0.jpg"
 			}
 		},
+		onLoad() {
+			if(this.BaseProperties.isLogin===true)
+			uni.switchTab({
+				url:"../UserInfo/UserInfo"
+			})
+		},
 		methods: {
 			login:function(){
 				console.log(this.password);
 				console.log(this.username);
+				let that=this;
 				uni.request({
-					url:base.baseUrl+base.apiLogin,
+					url:this.BaseProperties.baseUrl+this.BaseProperties.apiLogin,
 					method:"POST",
 					data:{
-						"username":this.username,
+						"mobile":this.username,
 						"password":this.password
 					},
 					success(res) {
-						if(res.getCode().eq(requestSuccessStatus))
+						console.log(res)
+						console.log()
+						if(res.data.code===that.BaseProperties.requestSuccessStatus||res.data.code==that.BaseProperties.loginAgain)
 						{
-							uni.setStorage({
-								key:"userInfo",
-								data:res.getData(),
-								success: (storeResponse) => {
-									console.log(storeResponse)
-								}
-							})
-						}
-						else{
-							uni.showToast({
-								title:"登录失败",
-								duration:500
+							res.data.data.avatar=that.BaseProperties.baseUrl+that.BaseProperties.apiFileRead+res.data.data.avatar;
+							that.BaseProperties.userSite=res.data.data;
+							that.BaseProperties.isLogin=true;
+							that.BaseProperties.header.setHeader(res.data.data);
+							uni.switchTab({
+								url:"../UserInfo/UserInfo"
 							})
 						}
 					},

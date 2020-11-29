@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App'
-
+import baseProperties from "common/baseCommon.js"
 import store from './store'
 
 Vue.config.productionTip = false
@@ -12,9 +12,8 @@ Vue.prototype.$backgroundAudioData = {
 	formatedPlayTime: '00:00:00'
 }
 Vue.prototype.$adpid = "1111111111"
-
+Vue.prototype.BaseProperties=baseProperties
 App.mpType = 'app'
-
 const app = new Vue({
 	store,
 	...App
