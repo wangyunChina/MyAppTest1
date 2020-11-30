@@ -12,31 +12,27 @@
 			<div class="option">
 			  <image src=""></image>
 			  <div class="option-text">每日推荐</div>
-			  
 			</div>
 			<div class="option">
-			 
 			  <image src=""></image>
 			  <div class="option-text">通知</div>
-			  
 			</div>
 			 <div class="option">
-		   
 			  <image src=""></image>
 			  <div class="option-text">收藏</div>
-
 			</div>
-			 <div class="option">
-			 		  
+			 <div class="option"> 		  
 			   <image src=""></image>
 			   <div class="option-text">我的培训</div>
-			 
 			 </div>
-	</div>
+		</div>
+		
+		<myCard titleImage="https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg" headerImage="https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg"></myCard>
 </div>
 </template>
 
 <script>
+	import myCard from "../../components/myCard/myCard.vue"
 	export default {
 		data() {
 			return {
@@ -44,12 +40,25 @@
 			header:this.BaseProperties.header
 			}
 		},
+		components:{myCard},
 		onLoad() {
 			console.log(this.header)
 			if(this.BaseProperties.isLogin==false)
-			uni.navigateTo({
-					url:"../login/login"
-				})
+			uni.showToast({
+				title:"你没有登录请先登录！",
+				duration:1000,
+				success: () => {
+				},
+				complete: () => {
+					     setTimeout(function () { 
+					       uni.navigateTo({
+					       		url:"../login/login"
+					       	})
+					         }, 1000)
+							
+				}
+			})
+			
 			console.log(this.userInfo)
 			console.log(this.BaseProperties.isLogin)
 			
