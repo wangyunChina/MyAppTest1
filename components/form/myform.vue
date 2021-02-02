@@ -2,7 +2,7 @@
 	<div id="inputBox">
 		<div id="inputBox_label">{{label}}</div>	
 		<div id="inputBox_input">
-			<input :type="type" :name="name" id="" :placeholder="placeHolder" @input="valInput"></input>
+			<input :type="type" :name="name" id="" :placeholder="placeHolder" v-on:input="valInput"></input>
 			<div style="width: 50vw;text-align: center;" v-if="enableButton=='true'" v-on:click="buttonFunctin">{{buttonText}}</div>
 		</div>
 	</div>

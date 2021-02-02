@@ -3,7 +3,7 @@ const apiTokenInvalid=401;
 const loginAgain=201;//重复登录
 //const baseUrl="http://localhost";
 const staticFilePath="http://localhost";
-const baseUrl="";
+const baseUrl="/apis";
 const apiLogin="/userservice/user/api/v1/login";
 const apiRegister="/userservice/user/api/v1/register";
 const apiSMSSendCode="/userservice/user/api/open/v1/SMS/send"
@@ -19,7 +19,6 @@ var userSite={
 	avatar:""
 }
 const request = function(options) {
-     options.url = baseUrl + options.url;
      try {
 
          options.header = this.header

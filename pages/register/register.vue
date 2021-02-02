@@ -28,15 +28,17 @@
 		methods: {
 			submit: function(event)
 			{
+				console.log(event)
 				var url=this.BaseProperties.apiRegister
 				var data={
 					"firstname": event.detail.value.firstName,
 					"lastName": event.detail.value.lastName,
 					"mobile": event.detail.value.username,
-					"password": event.detail.value.passowrd1,
+					"password": event.detail.value.password1,
 					"nickName":event.detail.value.nickName
 				}
 				var methods="POST"
+				console.log(data)
 				if(event.detail.value.passowrd1===event.detail.value.passowrd2){
 					var res=this.BaseProperties.baserRequest
 				    res.request(url,data,methods,function(response){

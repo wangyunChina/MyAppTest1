@@ -46,13 +46,17 @@
 				console.log(this.username);
 				var username=e.detail.value.username;
 				var password=e.detail.value.password;
+				var code=e.detail.value.code;
+				var mode=this.loginTypeArray[this.loginTypeIndex].type
 				let that=this;
 				uni.request({
 					url:this.BaseProperties.baseUrl+this.BaseProperties.apiLogin,
 					method:"POST",
 					data:{
 						"mobile":username,
-						"password":password
+						"password":password,
+						"code":code,
+						"mode":mode
 					},
 					success(res) {
 						console.log(res)
@@ -100,12 +104,12 @@
 				console.log(e)
 				let that=this;
 				let mobileNum=this.username;
-			
+				console.log(this.username)
 				if(this.checkPhone()){
 					this.BaseProperties.request({
 						url:this.BaseProperties.baseUrl+this.BaseProperties.apiSMSSendCode,
 						data:{
-							moblie:mobileNum
+							"mobile":mobileNum
 						},
 						method:"POST",
 						success:(res)=>{
