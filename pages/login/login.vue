@@ -3,8 +3,10 @@
 		<image class="logo" src="/static/logo.png"></image>
 	
 		<form @submit.prevent="login($event)">
-		<myform label="用 户 名" placeHolder="请输入用户名" name="username"></myform>
-		<myform label="密码" placeHolder="请输入密码" name="password" type="password"></myform>
+		<myform label="用 户 名" placeHolder="请输入用户名" name="username" v-model="username"></myform>
+		<myform v-show="loginTypeArray[loginTypeIndex].type==1" label="密码" placeHolder="请输入密码" name="password" type="password"></myform>
+		<myform v-show="loginTypeArray[loginTypeIndex].type==2" label="验证码" placeHolder="请输入验证码" name="code" type="text" enableButton="true" :buttonText="codeText" @sendCode="sendCode" v-model="code"></myform>
+		<view style="text-align: center;color: blue;" @click="switchType">{{loginTypeArray[loginTypeIndex].messageZH}}</view>
 		<button form-type="submit">登录</button>
 		</form>
 		<view class="text-navigator">
@@ -20,7 +22,14 @@
 			return {
 			username:"",
 			password:"",
-			login_logo:"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3355161828,1088477055&fm=26&gp=0.jpg"
+			login_logo:"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3355161828,1088477055&fm=26&gp=0.jpg",
+			loginTypeArray:[{type:1,messageZH:"验证码登录",messageEN:"Login with verification Code"},{type:2,messageZH:"密码登录",messageEN:"Login with password"}],
+			loginTypeIndex:0,
+			code:"",
+			codeSendTimes:0,
+			codeResetTime:60,
+			codeText:"发送",
+			timerNum:""
 			}
 		},
 		onLoad() {
@@ -50,7 +59,7 @@
 						console.log()
 						if(res.data.code===that.BaseProperties.requestSuccessStatus||res.data.code==that.BaseProperties.loginAgain)
 						{
-							res.data.data.avatar=that.BaseProperties.baseUrl+that.BaseProperties.apiFileRead+res.data.data.avatar;
+							res.data.data.avatar=that.BaseProperties.staticFilePath+that.BaseProperties.apiFileRead+res.data.data.avatar;
 							that.BaseProperties.userSite=res.data.data;
 							that.BaseProperties.isLogin=true;
 							that.BaseProperties.setHeader(res.data.data);
@@ -83,6 +92,59 @@
 					
 				})
 			},
+			switchType:function(e){
+			this.loginTypeIndex=(this.loginTypeIndex+1)%2
+			},
+			sendCode:function(e){
+				
+				console.log(e)
+				let that=this;
+				let mobileNum=this.username;
+			
+				if(this.checkPhone()){
+					this.BaseProperties.request({
+						url:this.BaseProperties.baseUrl+this.BaseProperties.apiSMSSendCode,
+						data:{
+							moblie:mobileNum
+						},
+						method:"POST",
+						success:(res)=>{
+							if(res.data.code==200){
+								that.codeSendTimes+=1;
+								that.timerNum=setInterval(that.timer,1000)
+							}else{
+								uni.showToast({
+									title:"发送验证码失败",
+									duration:500,
+									image:"../../static/netWorkError.png"
+								})
+							}
+						}
+					
+					})
+				}
+			},
+			checkPhone:function(){
+				if(!(/^1\d{10}$/.test(this.username))){   
+					uni.showToast({
+						title:"手机号有误",
+						duration:500,
+						image:"../../static/netWorkError.png"
+					})	
+				        return false; 
+				    }
+				return true;	 
+			},
+			timer:function(){
+				if(this.codeResetTime>0){
+					this.codeResetTime-=1;
+					this.codeText=this.codeResetTime+"s后可再次发送"
+				}else{
+					this.codeText="再次发送"
+					this.codeResetTime=60;
+					clearInterval(this.timerNum)
+				}
+			}
 		}
 	}
 </script>

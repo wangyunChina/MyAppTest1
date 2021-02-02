@@ -2,7 +2,8 @@
 	<div id="inputBox">
 		<div id="inputBox_label">{{label}}</div>	
 		<div id="inputBox_input">
-			<input :type="type" :name="name" id="" :placeholder="placeHolder"></input>
+			<input :type="type" :name="name" id="" :placeholder="placeHolder" @input="valInput"></input>
+			<div style="width: 50vw;text-align: center;" v-if="enableButton=='true'" v-on:click="buttonFunctin">{{buttonText}}</div>
 		</div>
 	</div>
 </template>
@@ -26,8 +27,25 @@
 			type:{
 				type:String,
 				default:"text"	
+			},
+			enableButton:{
+				type:String,
+				default:"false"
+			},
+	
+			buttonText:{
+				type:String,
+				default:""
 			}
 		},
+		methods:{
+			buttonFunctin:function(e){
+				this.$emit('sendCode',e)
+			},
+			valInput:function(e){
+				this.$emit('input',e.detail.value)
+			}
+		}
 		
 	}
 </script>
@@ -52,6 +70,9 @@
 	border:solid 1px #2C405A;
 	box-shadow: #ccc 0.5px;
 	border-radius:10px;
+	display: flex;
+	flex-direction: row;
+	line-height:28px
 }
 #inputBox_input input{
 height: 28px;

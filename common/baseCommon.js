@@ -2,9 +2,11 @@ const requestSuccessStatus=200;
 const apiTokenInvalid=401;
 const loginAgain=201;//重复登录
 //const baseUrl="http://localhost";
-const baseUrl="http://192.168.1.106";
+const staticFilePath="http://localhost";
+const baseUrl="";
 const apiLogin="/userservice/user/api/v1/login";
 const apiRegister="/userservice/user/api/v1/register";
+const apiSMSSendCode="/userservice/user/api/open/v1/SMS/send"
 const apiUploadFile="fileservice/file/api/v1/upload_file";
 const apiFileRead="/fileservice/file/api/open/v1/file/"
 var isLogin=false
@@ -16,6 +18,45 @@ var userSite={
 	nickName:"",
 	avatar:""
 }
+const request = function(options) {
+     options.url = baseUrl + options.url;
+     try {
+
+         options.header = this.header
+     } catch (err) {
+      console.log(err)
+    }
+	options.fail=(response)=>{
+		console.log(response)
+		uni.showToast({
+			title:"网络异常",
+			duration:500,
+			image:"../../static/netWorkError.png"
+		})
+		return ;
+	}
+    // 这里对response进行处理，
+    // 401表示登录状态过期，需重新登录
+	options.complete = (response) => {
+
+		if(response.statusCode==500||response.statusCode==404){
+			uni.showToast({
+				title:"网络异常",
+				duration:500,
+				image:"../../static/netWorkError.png"
+			})
+				return;
+		}
+		if (response.statusCode == 401) {
+			uni.navigateTo({
+			   url: '/pages/login/login' 
+			});
+			return;
+		}
+	}
+	
+    return uni.request(options);
+  }
 var header={
 	apiToken:"",
 	cid:"",
@@ -24,6 +65,7 @@ var header={
 	}
 
 export default {
+	staticFilePath,
 	requestSuccessStatus,
 	apiTokenInvalid,
 	apiLogin,
@@ -33,7 +75,9 @@ export default {
 	baseUrl,
 	userSite,
 	isLogin,
-	loginAgain,	
+	loginAgain,
+	apiSMSSendCode,
+	request,
 	baserRequest:{
 			data:{},
 			request:function(url,data,method,func){
