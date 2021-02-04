@@ -64,7 +64,9 @@
 						if(res.data.code===that.BaseProperties.requestSuccessStatus||res.data.code==that.BaseProperties.loginAgain)
 						{
 							res.data.data.avatar=that.BaseProperties.staticFilePath+that.BaseProperties.apiFileRead+res.data.data.avatar;
+							
 							that.BaseProperties.userSite=res.data.data;
+							console.log(that.BaseProperties.userSite)
 							that.BaseProperties.isLogin=true;
 							that.BaseProperties.setHeader(res.data.data);
 							uni.showToast({
