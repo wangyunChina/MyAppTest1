@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view :class="innerClass" @click="optionClicked">
+		<view :class="innerClass" @click="optionClicked" @change="init">
 			{{optionText}}
 		</view>
 	</view>
@@ -12,6 +12,7 @@
 			data(){return {
 				innerClass:"option"
 				}},
+			
 			name:"myOption",
 			props:{
 				optionText:{
@@ -27,10 +28,16 @@
 				optionClicked:function(res){
 				if(this.isCorrect){
 					this.innerClass="option_yes"
+					this.$emit("input",true)
 				}
 				else{
 					this.innerClass="option_no"
+					this.$emit("input",false)
 				}
+				setTimeout(()=>{this.innerClass="option"},100)
+				},
+				init:function(){
+					this.innerClass="option"
 				}
 			}
 		
@@ -49,6 +56,7 @@
 	-moz-box-shadow:3px 3px 4px #ccc;
 	-webkit-box-shadow:3px 3px 4px #ccc;
 	box-shadow:3px 3px 4px #ccc;
+	overflow-y: hidden;
 }
 .option_yes{
 	width: 75vw;
@@ -60,6 +68,7 @@
 	-moz-box-shadow:3px 3px 4px #ccc;
 	-webkit-box-shadow:3px 3px 4px #ccc;
 	box-shadow:3px 3px 4px #ccc;
+	overflow-y: hidden;
 }
 @keyframes no
 {
@@ -82,6 +91,7 @@
 	-webkit-box-shadow:3px 3px 4px #ccc;
 	box-shadow:3px 3px 4px #ccc;
 	animation: no 200ms;
+	overflow-y: hidden;
 }
 
 </style>

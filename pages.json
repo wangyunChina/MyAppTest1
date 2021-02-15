@@ -2,6 +2,12 @@
 	"pages": [
 		// pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
 			"path": "pages/study/study",
 			"style": {
 				"navigationBarTitleText": "学习"
@@ -22,12 +28,6 @@
 						}]
 					}
 				}
-			}
-		},
-		{
-			"path": "pages/login/login",
-			"style": {
-				"navigationBarTitleText": "登录"
 			}
 		},
 		{
@@ -1255,7 +1255,7 @@
 				"text": "书架"
 			},
 			{
-				"pagePath": "pages/tabBar/API/API",
+				"pagePath": "pages/UserInfo/UserInfo",
 				"iconPath": "static/api.png",
 				"selectedIconPath": "static/apiHL.png",
 				"text": "接口"

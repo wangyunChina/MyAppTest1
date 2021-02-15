@@ -10,7 +10,7 @@
 		3、单词详情接口。展示单词翻译、音标、读音、例句、图标
 		-->
 		<div id="bookShell">
-		<book bookFace="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=164125324,684919824&fm=26&gp=0.jpg" bookName="大学英语四级" bookStatus="20"></book>
+		<navigator url="../study/study?testType=1"><book bookFace="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=164125324,684919824&fm=26&gp=0.jpg" bookName="大学英语四级" bookStatus="20" ></book></navigator>
 		<book bookFace="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=164125324,684919824&fm=26&gp=0.jpg" bookName="大学英语四级" bookStatus="20"></book>
 		<book bookFace="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=164125324,684919824&fm=26&gp=0.jpg" bookName="大学英语四级" bookStatus="20"></book>
 		<book bookFace="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=164125324,684919824&fm=26&gp=0.jpg" bookName="大学英语四级" bookStatus="20"></book>
@@ -27,7 +27,11 @@
 			}
 		},
 		methods: {
-			
+			navigateToStudy:function(){
+				uni.navigateTo({
+					url:"../study/study"
+				})
+			}
 		},
 		components:{book}
 	}

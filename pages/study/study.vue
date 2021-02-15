@@ -7,7 +7,7 @@
 					<span>美国</span><span>[{{currentWord.detail.usPhonetic}}]</span><image src="../../static/voice.png" :data-voice="currentWord.detail.usSpeech" @click="play"></image>
 				</div>
 				<div class="yinbiao_item" v-show="currentWord.detail.ukPhonetic!=''&&currentWord.detail.ukPhonetic!=null" >
-					<span>英国</span><span>[{{currentWord.detail.usPhonetic}}]</span><image src="../../static/voice.png" :data-voice="currentWord.detail.usSpeech" @click="play"></image>
+					<span>英国</span><span>[{{currentWord.detail.ukPhonetic}}]</span><image src="../../static/voice.png" :data-voice="currentWord.detail.ukSpeech" @click="play"></image>
 				</div>
 			</div>
 			<div id="translate" v-for="(item,index) in currentWord.detail.explain">{{item}}
@@ -33,15 +33,15 @@
 			</div>
 			<div id="chart">
 				<div>数据统计</div>
-				<jpCharts v-if="list.length>0" :list="list" :Y="Charts.Y" :X="Charts.X" :keyId="Charts.keyId" :width="Charts.width" :bgColor="Charts.bgColor" :height="Charts.height" :canClick="Charts.canClick" :x_width="Charts.x_width" :items="items" :proportion="Charts.proportion" :checkedColor="Charts.checkedColor" :scrollLeft="100"></jpCharts>
+				<jpCharts v-if="list!=null&&list.length>0" :list="list" :Y="Charts.Y" :X="Charts.X" :keyId="Charts.keyId" :width="Charts.width" :bgColor="Charts.bgColor" :height="Charts.height" :canClick="Charts.canClick" :x_width="Charts.x_width" :items="items" :proportion="Charts.proportion" :checkedColor="Charts.checkedColor" :scrollLeft="100"></jpCharts>
 			</div>
 			<div id="buttons">
-				<div style="margin-left:5vw;width: 30vw;text-align: center;font-size: 15px;padding: 15px;">上一个</div><div style="margin-right:5vw;width: 60vw;text-align: center;font-size: 25px;">下一个</div>
+				<div style="margin-left:5vw;width: 30vw;text-align: center;font-size: 15px;padding: 15px;">上一个</div><div v-on:click="nextWordFunc" style="margin-right:5vw;width: 60vw;text-align: center;font-size: 25px;">下一个</div>
 			</div>
 		</div>
 		<div v-show="!selectRight" id="optionBox">
 			<div style="margin: 35rpx 0;" v-for="(item,index) in currentWord.option">
-				<myOption :optionText="item.translate" :isCorrect="item.isCorrect"></myOption>
+				<myOption v-show="!selectRight" :optionText="item.mean" @input="setScore" :isCorrect="item.correct"></myOption>
 			</div>
 		</div>
 	</view>
@@ -51,6 +51,11 @@
 	import myOption from "../../components/myOption.vue";
 	import jpCharts from '../../components/jp-charts/index.vue';
 	export default {
+		onLoad(request) {
+			console.log(request)
+			this.bookType=request.testType
+			this.nextWordFunc();
+		},
 		data() {
 			return {
 				Charts: { //y轴配置 value在list中的键 showY是否一直显示数据 size字大小 units文字后缀
@@ -79,132 +84,43 @@
 				 bgColor: '#fff',
 				 scrollLeft: 0
 				 },
-				 list: [{
-      "id": 23676,
-      "word": "start",
-      "count": 5,
-      "testType": 1,
-      "testTime": "2013年12月"
-    },
-    {
-      "id": 24961,
-      "word": "start",
-      "count": 2,
-      "testType": 1,
-      "testTime": "2014年06月"
-    },
-    {
-      "id": 26224,
-      "word": "start",
-      "count": 3,
-      "testType": 1,
-      "testTime": "2014年12月"
-    },
-    {
-      "id": 27521,
-      "word": "start",
-      "count": 7,
-      "testType": 1,
-      "testTime": "2015年06月"
-    },
-    {
-      "id": 29747,
-      "word": "start",
-      "count": 2,
-      "testType": 1,
-      "testTime": "2017年12月"
-    },
-    {
-      "id": 31928,
-      "word": "start",
-      "count": 1,
-      "testType": 1,
-      "testTime": "2019年06月"
-    }],
+				 list: [],
 				 items: {
 				 keyw: '03',
 				 value: 110
 				 },
-				selectRight:true,
-				bookType:"四级",
+				selectRight:false,
+				bookType:0,
 				histroyWord:[],
 				currentWord:{
-					word:"predict",
+					score:8,
+					word:"",
 					selectIndex:"",
-					option:[{translate:"v.预言",isCorrect:true},{translate:"v.飞行",isCorrect:false},{translate:"v.预言",isCorrect:false},{translate:"v.预言",isCorrect:false}],
+					option:[],
 					isShowDetail:false,
 					detail:{
-						usPhonetic:"prɪˈdɪkt",
-						ukPhonetic:"prɪˈdɪkt",
-						usSpeech:"http://openapi.youdao.com/ttsapi?q=predict&langType=en&sign=64F8A2CE7121C73391C764E43BCD0019&salt=1612589725569&voice=6&format=mp3&appKey=05af16dfb0899f79&ttsVoiceStrict=false",
-						ukSpeech:"http://openapi.youdao.com/ttsapi?q=predict&langType=en&sign=64F8A2CE7121C73391C764E43BCD0019&salt=1612589725569&voice=5&format=mp3&appKey=05af16dfb0899f79&ttsVoiceStrict=false",
-						explain:["v. 预言，预知，预卜；做预报；断言","n. 预告 "],
-						webDetail:[{
-						value: [
-            "预测",
-            "预知",
-            "预报"
-          ],
-          key: "predict"
-        },
-        {
-          value: [
-            "难以预料",
-            "难测"
-          ],
-          key: "Difficult to predict"
-        },
-        {
-          value: [
-            "专家预测",
-            "据专家预测"
-          ],
-          key: "Experts predict"
-        }],
-						exampleSentence:[
-							{
-							        englishExample: "1. For example, imagine manually calculating the trajectory of a thrown baseball in order to predict where it lands.",
-							        translate: "比如，我们来想像一下我们如何计算飞行中的棒球的轨迹，从而预测出落地的地点。",
-							        comeFrom: "-- 来源 -- About Face 3交互设计精髓"
-							      },
-							      {
-							        englishExample: "2. Electromagnetic theory was able to predict the mechanism of the reflection.",
-							        translate: "电磁理论能够推算出反射的作用过程。",
-							        comeFrom: "-- 来源 -- 英汉 - 辞典例句"
-							      }
-						],
-						lineChartData:[
-								[
-							      1312,
-							      5
-							    ],
-							    [
-							      1406,
-							      2
-							    ],
-							    [
-							      1412,
-							      3
-							    ],
-							    [
-							      1506,
-							      7
-							    ],
-							    [
-							      1712,
-							      2
-							    ],
-							    [
-							      1906,
-							      1
-							    ]
-						]
+						usPhonetic:"",
+						ukPhonetic:"",
+						usSpeech:"",
+						ukSpeech:"",
+						explain:[],
+						webDetail:[],
+						exampleSentence:[]
 					}
 				},
-				nextWord:{}
+				nextWord:[]
+				
 			}
 		},
 		methods: {
+		setScore:function(res){
+			console.log(res)
+			if(res){
+				this.selectRight=true
+			}else{
+				this.currentWord.score=this.currentWord.score/2;
+			}
+		},
 		play:function(e){
 			console.log(e)
 			let voice=e.currentTarget.dataset.voice;
@@ -219,6 +135,112 @@
 			  console.log(res.errMsg);
 			  console.log(res.errCode);
 			});
+		},
+		nextWordFunc:async function(){
+	
+			
+			console.log(this.nextWord.length)
+			if(this.nextWord.length<3){
+			  this.nextWords(this.bookType)
+			}else{
+			this.histroyWord.push(this.currentWord)	
+			var word=this.nextWord.pop();
+			this.currentWord.word=word.word;
+			this.currentWord.option=word.options;
+			this.currentWord.score=8;
+			this.selectRight=false;
+			console.log(this.currentWord)
+			this.wordDetail();
+			this.lineChart();
+			}
+		
+		},
+		nextWords:function(testType){
+		
+				let that=this;
+				if(this.nextWord.length>0&&this.nextWord.length<3){
+					let word =	that.nextWord.pop()
+					that.currentWord.word=word.word;
+					that.currentWord.option=word.options;
+					this.currentWord.score=8;
+					console.log(that.currentWord)
+					uni.request({
+						url:this.BaseProperties.baseUrl+this.BaseProperties.apiNextWords,
+						method:"POST",
+						header:this.BaseProperties.header,
+						data:{
+							"testType":testType
+						},
+						success:(res)=>{
+							if(res!=null&&res.statusCode==200){
+								for(var item=0;item<res.data.data.words.length;item++){
+									that.nextWord.push(res.data.data.words[item])
+								}
+							}
+						}
+					})
+				}else{
+				uni.request({
+					url:this.BaseProperties.baseUrl+this.BaseProperties.apiNextWords,
+					method:"POST",
+					data:{
+						"testType":testType
+					},
+					header:this.BaseProperties.header,
+					success:(res)=>{
+						if(res!=null&&res.statusCode==200){
+							for(var item=0;item<res.data.data.words.length;item++){
+								that.nextWord.push(res.data.data.words[item])
+							}
+							let word =	that.nextWord.pop()
+							that.currentWord.word=word.word;
+							that.currentWord.option=word.options;
+							this.currentWord.score=8;
+							console.log(that.currentWord)
+							this.wordDetail();
+							this.lineChart();
+						}
+					}
+				})
+			}
+		
+			
+		},
+		wordDetail: function(){
+			if(this.currentWord.word!=null&&this.currentWord.word!=""){
+				uni.request({
+					method:"GET",
+					url:this.BaseProperties.baseUrl+this.BaseProperties.apiWordDetail+"?query="+this.currentWord.word,
+					header:this.BaseProperties.header,
+					success:res=>{
+						let response=res.data.data
+						console.log("----------翻译结果------------")
+						console.log(response)
+						this.currentWord.detail.usPhonetic=response.translation.basic.usPhonetic;
+						this.currentWord.detail.ukPhonetic=response.translation.basic.ukPhonetic;
+						this.currentWord.detail.usSpeech=response.translation.basic.usSpeech;
+						this.currentWord.detail.ukSpeech=response.translation.basic.ukSpeech;
+						this.currentWord.detail.explain=response.translation.basic.explain;
+						this.currentWord.detail.webDetail=response.translation.web;
+						this.currentWord.detail.exampleSentence=response.example;	
+					}
+				})
+			}
+		},
+		 lineChart: function(){
+			if(this.currentWord.word!=null&&this.currentWord.word!=""){
+				uni.request({
+					method:"GET",
+					url:this.BaseProperties.baseUrl+this.BaseProperties.apiWordChart+"?word="+this.currentWord.word+"&type="+this.bookType,
+					header:this.BaseProperties.header,
+					success:res=>{
+						console.log("---------统计图----------")
+						let response=res.data;
+						console.log(response)
+						this.list=response.originalData;
+					}
+					})
+			}
 		}
 		},
 		components:{myOption,jpCharts}
@@ -262,5 +284,8 @@
 	width: 100vw;
 	background: #fff;
 	box-shadow:-3px -3px 4px #ccc;
+}
+#chart{
+	margin-bottom: 20vh;
 }
 </style>
