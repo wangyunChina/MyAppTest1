@@ -117,6 +117,16 @@
 			console.log(res)
 			if(res){
 				this.selectRight=true
+				uni.request({
+					url:this.BaseProperties.baseUrl+this.BaseProperties.apiStudyWord,
+					method:"POST",
+					header:this.BaseProperties.header,
+					data:{
+						"testType":this.bookType,
+						"score":this.currentWord.score,
+						"word":this.BaseProperties.header.cid,
+						"word":this.currentWord.word
+					}})
 			}else{
 				this.currentWord.score=this.currentWord.score/2;
 			}
@@ -137,34 +147,20 @@
 			});
 		},
 		nextWordFunc:async function(){
-	
-			
-			console.log(this.nextWord.length)
-			if(this.nextWord.length<3){
-			  this.nextWords(this.bookType)
-			}else{
-			this.histroyWord.push(this.currentWord)	
-			var word=this.nextWord.pop();
-			this.currentWord.word=word.word;
-			this.currentWord.option=word.options;
-			this.currentWord.score=8;
-			this.selectRight=false;
-			console.log(this.currentWord)
-			this.wordDetail();
-			this.lineChart();
+			if(this.nextWord.length>0){
+			this.histroyWord.push(this.currentWord)		
 			}
+			  this.nextWords(this.bookType)
+			
+			this.lineChart();
+			
 		
 		},
 		nextWords:function(testType){
 		
 				let that=this;
-				if(this.nextWord.length>0&&this.nextWord.length<3){
-					let word =	that.nextWord.pop()
-					that.currentWord.word=word.word;
-					that.currentWord.option=word.options;
-					this.currentWord.score=8;
-					console.log(that.currentWord)
-					uni.request({
+				if(this.nextWord.length<3){
+				uni.request({
 						url:this.BaseProperties.baseUrl+this.BaseProperties.apiNextWords,
 						method:"POST",
 						header:this.BaseProperties.header,
@@ -176,33 +172,40 @@
 								for(var item=0;item<res.data.data.words.length;item++){
 									that.nextWord.push(res.data.data.words[item])
 								}
+								var word1=that.nextWord.pop();
+								that.currentWord.word=word1.word;
+								that.currentWord.option=word1.options;
+								that.currentWord.score=8;
+								that.selectRight=false;
+								let response=word1.detail;
+								that.currentWord.detail.usPhonetic=response.translation.basic.usPhonetic;
+								that.currentWord.detail.ukPhonetic=response.translation.basic.ukPhonetic;
+								that.currentWord.detail.usSpeech=response.translation.basic.usSpeech;
+								that.currentWord.detail.ukSpeech=response.translation.basic.ukSpeech;
+								that.currentWord.detail.explain=response.translation.basic.explain;
+								that.currentWord.detail.webDetail=response.translation.web;
+								that.currentWord.detail.exampleSentence=response.example;	
+								console.log(this.currentWord)
 							}
+							
 						}
 					})
 				}else{
-				uni.request({
-					url:this.BaseProperties.baseUrl+this.BaseProperties.apiNextWords,
-					method:"POST",
-					data:{
-						"testType":testType
-					},
-					header:this.BaseProperties.header,
-					success:(res)=>{
-						if(res!=null&&res.statusCode==200){
-							for(var item=0;item<res.data.data.words.length;item++){
-								that.nextWord.push(res.data.data.words[item])
-							}
-							let word =	that.nextWord.pop()
-							that.currentWord.word=word.word;
-							that.currentWord.option=word.options;
-							this.currentWord.score=8;
-							console.log(that.currentWord)
-							this.wordDetail();
-							this.lineChart();
-						}
-					}
-				})
-			}
+				var word1=this.nextWord.pop();
+				this.currentWord.word=word1.word;
+				this.currentWord.option=word1.options;
+				this.currentWord.score=8;
+				this.selectRight=false;
+				let response=word1.detail;
+				this.currentWord.detail.usPhonetic=response.translation.basic.usPhonetic;
+				this.currentWord.detail.ukPhonetic=response.translation.basic.ukPhonetic;
+				this.currentWord.detail.usSpeech=response.translation.basic.usSpeech;
+				this.currentWord.detail.ukSpeech=response.translation.basic.ukSpeech;
+				this.currentWord.detail.explain=response.translation.basic.explain;
+				this.currentWord.detail.webDetail=response.translation.web;
+				this.currentWord.detail.exampleSentence=response.example;	
+				console.log(this.currentWord)		
+				}
 		
 			
 		},
