@@ -9,11 +9,12 @@
 		2、学习记录接口，兼具插入和更新功能。
 		3、单词详情接口。展示单词翻译、音标、读音、例句、图标
 		-->
-		<div id="bookShell">
-		<navigator url="../study/study?testType=1"><book bookFace="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=164125324,684919824&fm=26&gp=0.jpg" bookName="大学英语四级" bookStatus="20" ></book></navigator>
-		<book bookFace="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=164125324,684919824&fm=26&gp=0.jpg" bookName="大学英语四级" bookStatus="20"></book>
-		<book bookFace="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=164125324,684919824&fm=26&gp=0.jpg" bookName="大学英语四级" bookStatus="20"></book>
-		<book bookFace="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=164125324,684919824&fm=26&gp=0.jpg" bookName="大学英语四级" bookStatus="20"></book>
+		<div id="bookShell" >
+			<div v-for="item in bookList">
+				<navigator :url="item.bookType">
+				<book :bookFace="item.bookPicture" :bookName="item.bookName" :bookStatus="item.unstudyWords" ></book>
+				</navigator>
+			</div>
 		</div>
 	</view>
 </template>
@@ -23,13 +24,43 @@
 	export default {
 		data() {
 			return {
+				bookList:[
 				
+				]
 			}
+		},
+		onShow(){
+			console.log(1);
+		this.init();
 		},
 		methods: {
 			navigateToStudy:function(){
 				uni.navigateTo({
 					url:"../study/study"
+				})
+			},
+			init:function(){
+				let that=this;
+				uni.request({
+					url:this.BaseProperties.baseUrl+this.BaseProperties.apiBookChat,
+					data:{"cid":this.BaseProperties.header.cid},
+					header:this.BaseProperties.header,
+					method:"POST",
+					success:res=>{
+						console.log("书架请求成功：",JSON.stringify(res))
+						if(res.statusCode===200){
+							let data =  res.data.data;
+							for(var i=0;i<data.length;i++){
+								data[i].bookType="../study/study?testType="+data[i].bookType;
+								data[i].bookPicture=that.BaseProperties.staticFilePath+that.BaseProperties.apiFileRead+data[i].bookPicture;
+							}
+							console.log("数据处理完毕",JSON.stringify(data))
+							that.bookList=data;
+						}
+					},
+					fail:res=>{
+						init();
+					},
 				})
 			}
 		},

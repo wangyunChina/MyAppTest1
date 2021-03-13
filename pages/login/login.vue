@@ -69,7 +69,7 @@
 							console.log(that.BaseProperties.userSite)
 							that.BaseProperties.isLogin=true;
 							that.BaseProperties.header.cid=res.data.data.cid;
-							that.BaseProperties.header.apiToken="Bearer "+res.data.data.apiToken;
+							that.BaseProperties.header.Authorization="Bearer "+res.data.data.apiToken;
 							uni.showToast({
 								title:"登录成功",
 								duration:1000,

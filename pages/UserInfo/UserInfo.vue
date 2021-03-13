@@ -8,31 +8,25 @@
 			</block>
 		  </div> 
 		</div>
-		<div class="improtant-option">
-			<div class="option">
-			  <image src=""></image>
-			  <div class="option-text">每日推荐</div>
-			  
-			</div>
-			<div class="option">
-			 
-			  <image src=""></image>
-			  <div class="option-text">通知</div>
-			  
-			</div>
-			 <div class="option">
-		   
-			  <image src=""></image>
-			  <div class="option-text">收藏</div>
-
-			</div>
-			 <div class="option">
-			 		  
-			   <image src=""></image>
-			   <div class="option-text">我的培训</div>
-			 
-			 </div>
-	</div>
+		<div class="functions">
+			<!--
+			个人资料，
+			学习记录
+			记忆分析
+			VIP
+			设置
+			关于
+			-->
+		<block v-for="(item,index) in functions">
+		  <div class="name">
+		      <image :src="item.icon" mode="aspectFit"></image>
+		      <span class="function" style="font-size: 16px;margin-left: 5vw;width: 70vw;">{{item.name}}</span>
+			  <image src="../../static/next.png" style="margin-right: 5vw;"></image>
+		       <navigator :url="item.url">
+		      </navigator>
+		  </div>
+		</block>	 
+		</div>  
 </div>
 </template>
 
@@ -41,27 +35,64 @@
 		data() {
 			return {
 			userInfo:this.BaseProperties.userSite,
-			header:this.BaseProperties.header
+			header:this.BaseProperties.header,
+			functions:[
+				{icon:"",name:"",url:""}
+			]
 			}
 		},
-		onLoad() {
-			console.log(this.header)
-			if(this.BaseProperties.isLogin==false)
-			uni.navigateTo({
+		onNavigationBarButtonTap(e) {
+		    console.log("success")   
+				 uni.navigateTo({
+				 	url:"recordLife/recordLife.vue"
+				 })
+		},
+		onShow(){
+			
+			if(this.BaseProperties.isLogin==false){
+				uni.navigateTo({
 					url:"../login/login"
 				})
-			console.log(this.userInfo)
-			console.log(this.BaseProperties.isLogin)
-			
+			}
+			this.userInfo=this.BaseProperties.userSite;
+			this.getFunctions();
 		},
 		methods: {
-			
+				getFunctions:function(){
+				let that=this;
+				uni.request({
+					url:this.BaseProperties.baseUrl+this.BaseProperties.apiUserFunctions,
+					data:{"cid":this.BaseProperties.header.cid},
+					header:this.BaseProperties.header,
+					method:"POST",
+					success:res=>{
+						console.log("功能请求成功：",JSON.stringify(res))
+						if(res.statusCode===200){
+							that.functions=new Array();
+							let data =  res.data.data;
+							for(var i=0;i<data.length;i++){
+								data[i].icon=that.BaseProperties.staticFilePath+that.BaseProperties.apiFileRead+data[i].icon;
+								that.functions.push(data[i])
+							}
+						
+							console.log(that.functions)
+						}
+					},
+					fail:res=>{
+						getFunctions();
+					},
+				})
+			}
 		}
+		
 	}
 </script>
 
 <style>
 /**index.wxss**/
+.functions{
+	margin-top: 15vh;
+}
 .userinfo {
   display: flex;
   flex-direction: column;
@@ -83,22 +114,30 @@
 .usermotto {
   margin-top: 200px;
 }
+.functions{
+	width: 100vw;
+}
 .name{
   display: flex;
   flex-direction: row;
-  height: 8%;
-  margin-left: 10px;
-  width: 100%;
-  margin: 3% 5%;
+  height: 7vh;
+  width: 90vw;
+  margin: 3vh 5vw;
+  align-items: center;
+  -webkit-box-shadow:0px 3px 3px #c8c8c8 ;
+  -moz-box-shadow:0px 3px 3px #c8c8c8 ;	
 }
 .name image{
  height: 50rpx;
  width: 50rpx;
 }
-.name text{
+.name span{
   width: 35%;
   font-size: 15px;
   margin-left: 5px;
+}
+.function{
+
 }
 .improtant-option{
   width: 80%;
@@ -145,4 +184,6 @@ border-radius: 20rpx 20rpx;
   background: salmon;
     opacity: 0;
 }
+
+
 </style>

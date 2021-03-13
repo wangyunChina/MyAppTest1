@@ -2,28 +2,30 @@ const requestSuccessStatus=200;
 const apiTokenInvalid=401;
 const loginAgain=201;//重复登录
 //const baseUrl="http://localhost";
-const staticFilePath="http://epie.natapp1.cc";
-const baseUrl="/apis";
+const staticFilePath="http://epie-api.top";
+const baseUrl="apis";
 const apiLogin="/userservice/user/api/v1/login";
 const apiRegister="/userservice/user/api/v1/register";
 const apiSMSSendCode="/userservice/user/api/open/v1/SMS/send"
-const apiUploadFile="fileservice/file/api/open/v1/upload_file";
+const apiUploadFile="/fileservice/file/api/open/v1/upload_file";
 const apiFileRead="/fileservice/file/api/open/v1/file/"
 const apiNextWords="/english/study/api/v1/next-words";
 const apiStudyWord="/english/study/api/v1/study";
 const apiWordChart="/english/english/lineChart";
-const apiWordDetail="/english/study/api/v1/third/translate"
-var isLogin=false
+const apiWordDetail="/english/study/api/v1/third/translate";
+const apiBookChat="/english/book/api/v1/book-list";
+const apiUserFunctions="/userservice/user/api/v1/get-functions";
+var isLogin=false;
 var userSite={
 	cid:"",
 	mobile:"",
-	apiToken:"",
+	Authorization:"",
 	expireTime:"",
 	nickName:"",
 	avatar:""
 }
 var header={
-	apiToken:"",
+	Authorization:"",
 	cid:"",
 	"Access-Control-Allow-Origin":"*",
 	"Access-Control-Allow-Methods":"POST, GET, PUT, OPTIONS, DELETE"
@@ -80,6 +82,8 @@ export default {
 	apiStudyWord,
 	apiWordDetail,
 	apiWordChart,
+	apiBookChat,
+	apiUserFunctions,
 	baseUrl,
 	userSite,
 	isLogin,

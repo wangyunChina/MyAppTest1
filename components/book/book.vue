@@ -24,8 +24,8 @@
 				default:""
 			},
 			bookStatus:{
-				type:String,
-				default:"999"
+				type:Number,
+				default:999
 			}
 		},
 		methods:{
@@ -45,13 +45,13 @@
 	box-shadow:3px 3px 4px #ccc;
  }
  #bookFace{
-	 height: 30vh;
+	 height: 25vh;
 	 width: 100%;
 	
  }
  #bookName{
 	text-align: center;
-	 font-size: 16rpx;
+	 font-size: 30rpx;
  }
  #bookStatus{
 	 text-align: right;

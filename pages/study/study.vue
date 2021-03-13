@@ -1,6 +1,10 @@
 <template>
 	<view style="margin-left: 10px;margin-right: 10px;">
-		<div style="font-size: 30px;color: #000000;">{{currentWord.word}}</div>
+		<block v-if="currentWord.word==''">
+			<loading :loadModal="currentWord.word==''"></loading>
+		</block>
+		<block v-else>
+		<div style="font-size: 30px;color: #8A6DE9;"><h2>{{currentWord.word}}</h2></div>
 		<div v-show="selectRight==true" id="detatil">
 			<div id="yinbiao">
 				<div class="yinbiao_item" v-show="currentWord.detail.usPhonetic!=''&&currentWord.detail.usPhonetic!=null">
@@ -12,31 +16,37 @@
 			</div>
 			<div id="translate" v-for="(item,index) in currentWord.detail.explain">{{item}}
 			</div>
+			<HR align=center width="100%" color=#987cb9 SIZE=3 style="margin: 8px 0;"></HR>
 			<div id="webDetail">
-					<div>网络释义</div>
+					<h3>网络释义</h3>
 					<div v-for="(item,index) in currentWord.detail.webDetail">
-						<span>{{item.key}}:</span>
-						<span v-for="(value) in item.value">
-							{{value}}
+						<span style="color: #8A6DE9;font-size: 18px;">{{item.key}}:</span>
+						<span v-for="(value) in item.value" style="font-size: 15px;">
+							{{value}}; 
 						</span>
 					</div>
 			</div>
+			<HR align=center width="100%" color=#987cb9 SIZE=3 style="margin: 8px 0;"></HR>
 			<div id="sentence">
-				<div>经典例句</div>
+				<h3>经典例句</h3>
 				<div v-for="(item) in currentWord.detail.exampleSentence">
 					<div>
-						<span>{{item.englishExample}}</span>
+						<span style="font-size: 15px;">{{item.englishExample}}</span><br>
 						<span>————{{item.translate}}</span>
 					</div>
 					<div style="text-align:right;">{{item.comeFrom}}</div>
 				</div>
 			</div>
-			<div id="chart">
-				<div>数据统计</div>
+			<div id="chart" v-if="list!=null&&list.length>0">
+			<HR align=center width="100%" color=#987cb9 SIZE=3 style="margin: 8px 0;"></HR>
+				<h3>数据统计</h3>
 				<jpCharts v-if="list!=null&&list.length>0" :list="list" :Y="Charts.Y" :X="Charts.X" :keyId="Charts.keyId" :width="Charts.width" :bgColor="Charts.bgColor" :height="Charts.height" :canClick="Charts.canClick" :x_width="Charts.x_width" :items="items" :proportion="Charts.proportion" :checkedColor="Charts.checkedColor" :scrollLeft="100"></jpCharts>
 			</div>
+			<div style="height:20vh ;">
+				
+			</div>
 			<div id="buttons">
-				<div style="margin-left:5vw;width: 30vw;text-align: center;font-size: 15px;padding: 15px;">上一个</div><div v-on:click="nextWordFunc" style="margin-right:5vw;width: 60vw;text-align: center;font-size: 25px;">下一个</div>
+				<div style="margin-left:5vw;width: 30vw;text-align: center;font-size: 15px;padding: 15px;" v-on:click="preWord" >上一个</div><div v-on:click="nextWordFunc" style="margin-right:5vw;width: 60vw;justify-content: center;text-align: center;display:flex;flex-direction:row;font-size: 25px;align-items: center;"><div>下一个</div><image src="../../static/next.png" style="width: 27px;margin-left: 8px;height: 27px;"></image></div>
 			</div>
 		</div>
 		<div v-show="!selectRight" id="optionBox">
@@ -44,12 +54,14 @@
 				<myOption v-show="!selectRight" :optionText="item.mean" @input="setScore" :isCorrect="item.correct"></myOption>
 			</div>
 		</div>
+		</block>
 	</view>
 </template>
 
 <script>
 	import myOption from "../../components/myOption.vue";
 	import jpCharts from '../../components/jp-charts/index.vue';
+	import loading from '../../components/ming1027-loading/loading.vue'
 	export default {
 		onLoad(request) {
 			console.log(request)
@@ -81,7 +93,7 @@
 				 showZ: false, //是否显示线条
 				 checkedColor: '#007aff',
 				 canClick: true, //不可以点击
-				 bgColor: '#fff',
+				 bgColor: '#9198e5',
 				 scrollLeft: 0
 				 },
 				 list: [],
@@ -91,6 +103,7 @@
 				 },
 				selectRight:false,
 				bookType:0,
+				histroyWordStackTop:0,
 				histroyWord:[],
 				currentWord:{
 					score:8,
@@ -147,14 +160,22 @@
 			});
 		},
 		nextWordFunc:async function(){
+			
 			if(this.nextWord.length>0){
-			this.histroyWord.push(this.currentWord)		
+			var newObj = JSON.stringify(this.currentWord)
+			
+			this.histroyWord.push(JSON.parse(newObj))		
 			}
 			  this.nextWords(this.bookType)
 			
 			this.lineChart();
-			
+			this.histroyWordStackTop=this.histroyWord.length;
 		
+		},
+		preWord:function(){
+			if(this.histroyWord.length>0){
+				this.currentWord=this.histroyWord.pop();
+			}
 		},
 		nextWords:function(testType){
 		
@@ -182,12 +203,19 @@
 								that.currentWord.detail.ukPhonetic=response.translation.basic.ukPhonetic;
 								that.currentWord.detail.usSpeech=response.translation.basic.usSpeech;
 								that.currentWord.detail.ukSpeech=response.translation.basic.ukSpeech;
-								that.currentWord.detail.explain=response.translation.basic.explain;
+								that.currentWord.detail.explain=response.translation.basic.explains;
 								that.currentWord.detail.webDetail=response.translation.web;
 								that.currentWord.detail.exampleSentence=response.example;	
 								console.log(this.currentWord)
 							}
 							
+						},fail(res) {
+							if(res.statusCode==401)
+							{
+								uni.navigateTo({
+										url:"../login/login"
+									})
+							}
 						}
 					})
 				}else{
@@ -201,7 +229,7 @@
 				this.currentWord.detail.ukPhonetic=response.translation.basic.ukPhonetic;
 				this.currentWord.detail.usSpeech=response.translation.basic.usSpeech;
 				this.currentWord.detail.ukSpeech=response.translation.basic.ukSpeech;
-				this.currentWord.detail.explain=response.translation.basic.explain;
+				this.currentWord.detail.explain=response.translation.basic.explains;
 				this.currentWord.detail.webDetail=response.translation.web;
 				this.currentWord.detail.exampleSentence=response.example;	
 				console.log(this.currentWord)		
@@ -226,6 +254,14 @@
 						this.currentWord.detail.explain=response.translation.basic.explain;
 						this.currentWord.detail.webDetail=response.translation.web;
 						this.currentWord.detail.exampleSentence=response.example;	
+					},
+					fail(res) {
+						if(res.statusCode==401)
+						{
+							uni.navigateTo({
+									url:"../login/login"
+								})
+						}
 					}
 				})
 			}
@@ -246,7 +282,7 @@
 			}
 		}
 		},
-		components:{myOption,jpCharts}
+		components:{myOption,jpCharts,loading}
 	}
 </script>
 
@@ -256,25 +292,23 @@
 	padding: 0 10vw;
 }
 #yinbiao{
-	display: flex;
-	flex-direction: row;
-	margin: 5px 5px;
+	
 }
 .yinbiao_item {
 	display: flex;
 	flex-direction: row;
-	margin: 0 5px;
 }
 .yinbiao_item span{
 	font-style: italic;
-	margin: 0 5px;
 }
 .yinbiao_item image{
 	width: 5vw;
 	height: 4vh;
+	margin-left: 5vw;
 }
 #translate{
 	font-size: 16px;
+	font-weight: 600;
 }
 #buttons{
 	display: flex;
@@ -287,8 +321,11 @@
 	width: 100vw;
 	background: #fff;
 	box-shadow:-3px -3px 4px #ccc;
+	align-items: center;
 }
-#chart{
-	margin-bottom: 20vh;
+.line{
+	width: 100vw;
+	height: 2vh;
+	color: #323233;
 }
 </style>

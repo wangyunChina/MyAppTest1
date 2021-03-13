@@ -74,9 +74,13 @@
             "sdkConfigs" : {
                 "speech" : {
                     "ifly" : {}
-                }
+                },
+                "ad" : {}
             },
             "orientation" : [ "portrait-primary" ]
+        },
+        "uniStatistics" : {
+            "enable" : false
         }
     },
     /* 快应用特有相关 */
@@ -108,16 +112,28 @@
             "scope.userLocation" : {
                 "desc" : "演示定位能力"
             }
+        },
+        "uniStatistics" : {
+            "enable" : false
         }
     },
     "mp-alipay" : {
-        "usingComponents" : true
+        "usingComponents" : true,
+        "uniStatistics" : {
+            "enable" : false
+        }
     },
     "mp-baidu" : {
-        "usingComponents" : true
+        "usingComponents" : true,
+        "uniStatistics" : {
+            "enable" : false
+        }
     },
     "mp-toutiao" : {
-        "usingComponents" : true
+        "usingComponents" : true,
+        "uniStatistics" : {
+            "enable" : false
+        }
     },
     "h5" : {
         "template" : "template.h5.html",
@@ -125,20 +141,21 @@
             "mode" : "history",
             "base" : ""
         },
-		"devServer": {  
-		            "port": 8080,  
-		            "disableHostCheck": true,  
-		            "proxy": {  
-		                "/apis": {  
-		                    "target": "http://epie.natapp1.cc",  //请求的目标域名
-		                    "changeOrigin": true,   
-		                    "secure": false,
-		                    "pathRewrite": {  //使用代理； 告诉他你这个连接要用代理
-		                        "^/apis": "/"  
-		                    }  
-		                }  
-		            }  
-		        },  
+        "devServer" : {
+            "port" : 8080,
+            "disableHostCheck" : true,
+            "proxy" : {
+                "/apis" : {
+                    "target" : "http://epie-api.top", //请求的目标域名
+                    "changeOrigin" : true,
+                    "secure" : false,
+                    "pathRewrite" : {
+                        //使用代理； 告诉他你这个连接要用代理
+                        "^/apis" : "/"
+                    }
+                }
+            }
+        },
         "sdkConfigs" : {
             "maps" : {
                 "qqmap" : {
@@ -148,6 +165,17 @@
         },
         "async" : {
             "timeout" : 20000
+        },
+        "uniStatistics" : {
+            "enable" : false
+        }
+    },
+    "uniStatistics" : {
+        "enable" : false
+    },
+    "mp-qq" : {
+        "uniStatistics" : {
+            "enable" : false
         }
     }
 }

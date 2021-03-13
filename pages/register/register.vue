@@ -28,14 +28,16 @@
 		},
 		methods: {
 			submit: function(event)
-			{
+			{console.log("正在进行文件上传")
 				let that=this;
+				console.log(this.BaseProperties.baseUrl + this.BaseProperties.apiUploadFile)
 				uni.uploadFile({
 					url: this.BaseProperties.baseUrl + this.BaseProperties.apiUploadFile,
 					filePath: this.avatarUrl,
 					fileType: 'image',
 					name: 'fileName',
 					success: (res) => {
+						console.log(res)
 					if(res.statusCode==200){
 						let response=JSON.parse(res.data)
 						let headImage="";
@@ -60,6 +62,7 @@
 						if(event.detail.value.passowrd1===event.detail.value.passowrd2){
 							var res=that.BaseProperties.baserRequest
 						    res.request(url,data,methods,function(response){
+								console.log(response)
 								if(response.data.code==701){
 									uni.showToast({
 										title:response.data.message,
@@ -88,6 +91,11 @@
 						}
 					}
 					
+					},fail:(res)=>{
+						
+						uni.showToast({
+							title:"注册失败",
+							duration:1000})
 					}
 				})
 		

@@ -2,6 +2,15 @@
 	"pages": [
 		// pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+		    "path" : "pages/UserInfo/recordLife/recordLife",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "签到",
+		        "enablePullDownRefresh": true
+		    }
+		    
+		},
+		{
 			"path": "pages/login/login",
 			"style": {
 				"navigationBarTitleText": "登录"
@@ -38,9 +47,9 @@
 					"bounce": "vertical",
 					"titleNView": {
 						"buttons": [{
-							"text": "\ue534",
+							"text": "签到",
 							"fontSrc": "/static/uni.ttf",
-							"fontSize": "22px",
+							"fontSize": "16px",
 							"color": "#FFFFFF"
 						}]
 					}
@@ -368,6 +377,43 @@
         }
         ,{
             "path" : "pages/study/study",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        
+        ,{
+            "path" : "pages/UserInfo/setting/setting",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/UserInfo/studyHistory/studyHistory",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/UserInfo/memoryLine/memoryLine",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/UserInfo/aboutUs/aboutUs",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
@@ -1235,7 +1281,7 @@
 		"pageOrientation": "portrait",
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "Hello uniapp",
-		"navigationBarBackgroundColor": "#007AFF",
+		"navigationBarBackgroundColor": "#000",
 		"backgroundColor": "#F8F8F8",
 		"backgroundColorTop": "#F4F5F6",
 		"backgroundColorBottom": "#F4F5F6",
@@ -1250,25 +1296,15 @@
 		"backgroundColor": "#F8F8F8",
 		"list": [{
 				"pagePath": "pages/index/index",
-				"iconPath": "static/component.png",
-				"selectedIconPath": "static/componentHL.png",
+				"iconPath": "static/bookChat.png",
+				"selectedIconPath": "static/bookChatSe.png",
 				"text": "书架"
 			},
 			{
 				"pagePath": "pages/UserInfo/UserInfo",
-				"iconPath": "static/api.png",
-				"selectedIconPath": "static/apiHL.png",
-				"text": "接口"
-			}, {
-				"pagePath": "pages/tabBar/extUI/extUI",
-				"iconPath": "static/extui.png",
-				"selectedIconPath": "static/extuiHL.png",
-				"text": "扩展组件"
-			}, {
-				"pagePath": "pages/tabBar/template/template",
-				"iconPath": "static/template.png",
-				"selectedIconPath": "static/templateHL.png",
-				"text": "模板"
+				"iconPath": "static/userInfo.png",
+				"selectedIconPath": "static/userInfoSe.png",
+				"text": "个人中心"
 			}
 		]
 	}
