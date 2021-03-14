@@ -18,7 +18,7 @@
 			关于
 			-->
 		<block v-for="(item,index) in functions">
-		  <div class="name">
+		  <div class="name" :data-url="item.url" @click="redirect">
 		      <image :src="item.icon" mode="aspectFit"></image>
 		      <span class="function" style="font-size: 16px;margin-left: 5vw;width: 70vw;">{{item.name}}</span>
 			  <image src="../../static/next.png" style="margin-right: 5vw;"></image>
@@ -37,14 +37,17 @@
 			userInfo:this.BaseProperties.userSite,
 			header:this.BaseProperties.header,
 			functions:[
-				{icon:"",name:"",url:""}
+				
 			]
 			}
 		},
 		onNavigationBarButtonTap(e) {
 		    console.log("success")   
 				 uni.navigateTo({
-				 	url:"recordLife/recordLife.vue"
+				 	url:"/pages/UserInfo/recordLife/recordLife",
+					complete:function(res) {
+						console.log(res)
+					}
 				 })
 		},
 		onShow(){
@@ -52,12 +55,22 @@
 			if(this.BaseProperties.isLogin==false){
 				uni.navigateTo({
 					url:"../login/login"
+					
 				})
 			}
 			this.userInfo=this.BaseProperties.userSite;
 			this.getFunctions();
 		},
 		methods: {
+			redirect:function(e){
+				uni.navigateTo({
+					url:e.currentTarget.dataset.url,
+					
+					complete:function(res) {
+						console.log(res)
+					}
+				})
+			},
 				getFunctions:function(){
 				let that=this;
 				uni.request({

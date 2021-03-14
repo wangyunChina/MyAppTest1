@@ -2,6 +2,42 @@
 	"pages": [
 		// pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
+		    "path" : "pages/UserInfo/userDetail/userDetail",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "个人资料",
+		        "enablePullDownRefresh": true,
+				"app-plus": {
+					"bounce": "vertical",
+					"titleNView": {
+						"buttons": [{
+							"text": "编辑",
+							"fontSrc": "/static/uni.ttf",
+							"fontSize": "16px",
+							"color": "#FFFFFF"
+						}]
+					}
+				}
+		    }
+		    
+		},
+		{
+		    "path" : "pages/UserInfo/setting/setting",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "设置",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		}
+		,
+		{
 		    "path" : "pages/UserInfo/recordLife/recordLife",
 		    "style" :                                                                                    
 		    {
@@ -10,12 +46,7 @@
 		    }
 		    
 		},
-		{
-			"path": "pages/login/login",
-			"style": {
-				"navigationBarTitleText": "登录"
-			}
-		},
+	
 		{
 			"path": "pages/study/study",
 			"style": {
@@ -26,6 +57,7 @@
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "书单",
+				"enablePullDownRefresh":true,
 				"app-plus": {
 					"bounce": "vertical",
 					"titleNView": {
@@ -386,19 +418,10 @@
         }
         
         ,{
-            "path" : "pages/UserInfo/setting/setting",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
             "path" : "pages/UserInfo/studyHistory/studyHistory",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "学习记录",
                 "enablePullDownRefresh": false
             }
             
@@ -407,7 +430,7 @@
             "path" : "pages/UserInfo/memoryLine/memoryLine",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "记忆曲线",
                 "enablePullDownRefresh": false
             }
             
@@ -416,11 +439,12 @@
             "path" : "pages/UserInfo/aboutUs/aboutUs",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "关于我们",
                 "enablePullDownRefresh": false
             }
             
         }
+        
     ],
 	"subPackages": [{
 			"root": "pages/API",

@@ -140,6 +140,13 @@
 						"word":this.BaseProperties.header.cid,
 						"word":this.currentWord.word
 					}})
+					this.play({
+						currentTarget:{
+							dataset:{
+								voice:this.currentWord.detail.usSpeech
+							}
+						}
+					})
 			}else{
 				this.currentWord.score=this.currentWord.score/2;
 			}
@@ -155,8 +162,8 @@
 			  console.log('开始播放');
 			});
 			innerAudioContext.onError((res) => {
-			  console.log(res.errMsg);
-			  console.log(res.errCode);
+			  console.log(res);
+			  console.log(res);
 			});
 		},
 		nextWordFunc:async function(){

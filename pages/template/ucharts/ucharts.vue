@@ -223,6 +223,7 @@
 					url: 'https://unidemo.dcloud.net.cn/hello-uniapp-ucharts-data.json',
 					data: {},
 					success: function(res) {
+						console.log(JSON.stringify(res.data.Area))
 						_self.fillData(res.data);
 					},
 					fail: () => {
