@@ -2,6 +2,16 @@
 	"pages": [
 		// pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+		    "path" : "pages/UserInfo/memoryLine/memoryLine",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "记忆曲线",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		}
+		,
+		{
 			"path": "pages/login/login",
 			"style": {
 				"navigationBarTitleText": "登录"
@@ -422,15 +432,6 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "学习记录",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/UserInfo/memoryLine/memoryLine",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "记忆曲线",
                 "enablePullDownRefresh": false
             }
             

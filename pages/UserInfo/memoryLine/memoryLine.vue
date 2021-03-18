@@ -1,15 +1,58 @@
 <template>
 	<view>
-		<view class="qiun-bg-white qiun-title-bar qiun-common-mt" >
-			<view class="qiun-title-dot-light">记忆曲线</view>
+		<view v-if="Area!=null">
+			<view class="qiun-bg-white qiun-title-bar qiun-common-mt" >
+				<view class="qiun-title-dot-light">记忆曲线</view>
+			</view>
+			<view class="qiun-charts">
+				<!--#ifdef MP-ALIPAY -->
+				<canvas canvas-id="canvasArea" id="canvasArea" class="charts" :width="cWidth*pixelRatio" :height="cHeight*pixelRatio" :style="{'width':cWidth+'px','height':cHeight+'px'}" @touchstart="touchIt($event,'canvasArea')"></canvas>
+				<!--#endif-->
+				<!--#ifndef MP-ALIPAY -->
+				<canvas canvas-id="canvasArea" id="canvasArea" class="charts" @touchstart="touchIt($event,'canvasArea')"></canvas>
+				<!--#endif-->
+			</view>
 		</view>
-		<view class="qiun-charts">
-			<!--#ifdef MP-ALIPAY -->
-			<canvas canvas-id="canvasArea" id="canvasArea" class="charts" :width="cWidth*pixelRatio" :height="cHeight*pixelRatio" :style="{'width':cWidth+'px','height':cHeight+'px'}" @touchstart="touchIt($event,'canvasArea')"></canvas>
-			<!--#endif-->
-			<!--#ifndef MP-ALIPAY -->
-			<canvas canvas-id="canvasArea" id="canvasArea" class="charts" @touchstart="touchIt($event,'canvasArea')"></canvas>
-			<!--#endif-->
+		<view v-if="Pie!=null">
+			<view class="qiun-bg-white qiun-title-bar qiun-common-mt" >
+				<view class="qiun-title-dot-light">学习足迹</view>
+				<view v-if="Pie.series==null">你还没有足迹，快点儿去学习吧！</view>
+			</view>
+			<view v-if="Pie.series!=null" class="qiun-charts">
+				<!--#ifdef MP-ALIPAY -->
+				<canvas canvas-id="canvasPie" id="canvasPie" class="charts" :width="cWidth*pixelRatio" :height="cHeight*pixelRatio" :style="{'width':cWidth+'px','height':cHeight+'px'}" @touchstart="touchPie($event,'canvasPie')"></canvas>
+				<!--#endif-->
+				<!--#ifndef MP-ALIPAY -->
+				<canvas canvas-id="canvasPie" id="canvasPie" class="charts" @touchstart="touchPie($event,'canvasPie')"></canvas>
+				<!--#endif-->
+				
+			</view>
+		</view>
+		<view v-if="Gauge1.series!=null">
+			<view class="qiun-bg-white qiun-title-bar qiun-common-mt" >
+				<view class="qiun-title-dot-light">{{Gauge1.series[0].name}}</view>
+			</view>
+			<view class="qiun-charts">
+				<!--#ifdef MP-ALIPAY -->
+				<canvas canvas-id="canvasGauge1" id="canvasGauge" class="charts" :width="cWidth*pixelRatio" :height="cHeight*pixelRatio" :style="{'width':cWidth+'px','height':cHeight+'px'}"></canvas>
+				<!--#endif-->
+				<!--#ifndef MP-ALIPAY -->
+				<canvas canvas-id="canvasGauge1" id="canvasGauge" class="charts"></canvas>
+				<!--#endif-->
+			</view>
+		</view>
+		<view v-if="Gauge2.series!=null">
+			<view class="qiun-bg-white qiun-title-bar qiun-common-mt" >
+				<view class="qiun-title-dot-light">{{Gauge2.series[0].name}}</view>
+			</view>
+			<view class="qiun-charts">
+				<!--#ifdef MP-ALIPAY -->
+				<canvas canvas-id="canvasGauge2" id="canvasGauge" class="charts" :width="cWidth*pixelRatio" :height="cHeight*pixelRatio" :style="{'width':cWidth+'px','height':cHeight+'px'}"></canvas>
+				<!--#endif-->
+				<!--#ifndef MP-ALIPAY -->
+				<canvas canvas-id="canvasGauge2" id="canvasGauge" class="charts"></canvas>
+				<!--#endif-->
+			</view>
 		</view>
 	</view>
 </template>
@@ -35,23 +78,34 @@
 				serverData: '',
 				itemCount: 30, //x轴单屏数据密度
 				sliderMax: 50,
-				Area : {
-							categories:["2012","2013","2014","2015","2016","2017","2018"],
-							series:
-							[{
-								name:"成交量A",
-								data:[100,80,95,150,112,132,20],
-								color:"#facc14"
-								},
-								{name:"成交量B",
-								data:[70,40,65,100,44,68,50],
-								color:"#2fc25b"
-								},
-								{name:"成交量C",
-								data:[35,20,25,37,4,20,60],
-								color:"#1890ff"},
-								]
-						}
+				Area : null,
+				Pie:null,
+				Gauge1: {
+						categories: [{
+							value: 0.2,
+							color: "#1890ff"
+						}, {
+							value: 0.8,
+							color: "#2fc25b"
+						}, {
+							value: 1,
+							color: "#f04864"
+						}],
+						series: null
+					},
+				Gauge2: {
+						categories: [{
+							value: 0.2,
+							color: "#f04864"
+						}, {
+							value: 0.8,
+							color: "#1890ff"
+						}, {
+							value: 1,
+							color: "#2fc25b"
+						}],
+						series: null
+					}	
 			}
 		},
 		onLoad() {
@@ -76,10 +130,124 @@
 			this.arcbarWidth = uni.upx2px(24);
 			this.gaugeWidth = uni.upx2px(30);
 		},
-		onShow(){
-			this.showArea("canvasArea",this.Area);
+	
+		onReady(){
+			this.getServerData()
 		},
 		methods: {
+			getServerData() {
+				uni.showLoading({
+					title: "正在加载数据..."
+				})
+				let that=this;
+				uni.request({
+					url: this.BaseProperties.baseUrl+this.BaseProperties.apiUserChart,
+					data: {
+						cid:"8T1YWDEV202102041900214518",
+						days:7
+						},
+					method:"POST",
+					header:this.BaseProperties.header,
+					success: function(res) {
+						console.log(res.data)
+						that.fillData(res.data);
+					},
+					fail: () => {
+						that.tips = "网络错误，小程序端请检查合法域名";
+					},
+					complete() {
+						uni.hideLoading();
+					}
+				});
+			},
+			fillData(data){
+				this.Area=data.data.areaData;
+				this.Pie=data.data.pieData;
+				this.Gauge1.series=data.data.studySuccessArcBarData.series;
+				this.Gauge2.series=data.data.reviewSuccessArcBarData.series;
+				console.log(this.Pie)
+				this.Area!=null?this.showArea("canvasArea",this.Area):0;
+				this.Pie!=undefined?this.showPie("canvasPie", this.Pie):0;
+				this.Gauge2.series!=null?this.showGauge("canvasGauge2",this.Gauge2):0;
+				this.Gauge1.series!=null?this.showGauge("canvasGauge1",this.Gauge1):0;
+			},
+			showPie(canvasId, chartData) {
+				canvasObj[canvasId] = new uCharts({
+					$this: _self,
+					canvasId: canvasId,
+					type: 'pie',
+					fontSize: 11,
+					padding:[15,15,0,15],
+					legend:{
+						show:true,
+						padding:5,
+						lineHeight:11,
+						margin:0,
+					},
+					background: '#FFFFFF',
+					pixelRatio: _self.pixelRatio,
+					series: chartData.series,
+					animation: false,
+					width: _self.cWidth * _self.pixelRatio,
+					height: _self.cHeight * _self.pixelRatio,
+					dataLabel: true,
+					extra: {
+						pie: {
+							lableWidth: 15
+						}
+					},
+				});
+			},
+			showGauge(canvasId, chartData) {
+				canvasObj[canvasId] = new uCharts({
+					$this: _self,
+					canvasId: canvasId,
+					type: 'gauge',
+					fontSize: 11,
+					title: {
+						name: Math.round(chartData.series[0].data * 100) + '%',
+						color: chartData.categories[1].color,
+						fontSize: 25 * _self.pixelRatio,
+						offsetY: 50 * _self.pixelRatio, //新增参数，自定义调整Y轴文案距离
+					},
+					subtitle: {
+						name: chartData.series[0].name,
+						color: '#666666',
+						fontSize: 15 * _self.pixelRatio,
+						offsetY: -50 * _self.pixelRatio, //新增参数，自定义调整Y轴文案距离
+					},
+					extra: {
+						gauge: {
+							type: 'default',
+							width: _self.gaugeWidth * _self.pixelRatio, //仪表盘背景的宽度
+							startAngle: 0.75,
+							endAngle: 0.25,
+							startNumber: 0,
+							endNumber: 100,
+							splitLine: {
+								fixRadius: 0,
+								splitNumber: 10,
+								width: _self.gaugeWidth * _self.pixelRatio, //仪表盘背景的宽度
+								color: '#FFFFFF',
+								childNumber: 5,
+								childWidth: _self.gaugeWidth * 0.4 * _self.pixelRatio, //仪表盘背景的宽度
+							},
+							pointer: {
+								width: _self.gaugeWidth * 0.8 * _self.pixelRatio, //指针宽度
+								color: 'auto'
+							}
+						}
+					},
+					background: '#FFFFFF',
+					pixelRatio: _self.pixelRatio,
+					categories: chartData.categories,
+					series: chartData.series,
+					animation: true,
+					width: _self.cWidth * _self.pixelRatio,
+					height: _self.cHeight * _self.pixelRatio,
+					dataLabel: true,
+				});
+			},
 			showArea(canvasId, chartData) {
 				canvasObj[canvasId] = new uCharts({
 					$this:_self,
@@ -141,6 +309,13 @@
 							}
 						}
 					});
+				},
+				touchPie(e,id) {
+				  canvasObj[id].showToolTip(e, {
+				      format: function(item) {
+				          return item.name + ':' + item.data
+				      }
+				  });
 				},
 		}
 	}

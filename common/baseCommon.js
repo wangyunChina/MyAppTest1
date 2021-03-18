@@ -15,6 +15,7 @@ const apiWordChart="/english/english/lineChart";
 const apiWordDetail="/english/study/api/v1/third/translate";
 const apiBookChat="/english/book/api/v1/book-list";
 const apiUserFunctions="/userservice/user/api/v1/get-functions";
+const apiUserChart="/english/chart/api/v1/get-user-chart";
 var isLogin=false;
 var userSite={
 	cid:"",
@@ -84,6 +85,7 @@ export default {
 	apiWordChart,
 	apiBookChat,
 	apiUserFunctions,
+	apiUserChart,
 	baseUrl,
 	userSite,
 	isLogin,
