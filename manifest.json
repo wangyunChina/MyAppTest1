@@ -146,7 +146,7 @@
             "disableHostCheck" : true,
             "proxy" : {
                 "/apis" : {
-                    "target" : "http://localhost:5880", //请求的目标域名
+                    "target" : "http://localhost", //请求的目标域名
                     "changeOrigin" : true,
                     "secure" : false,
                     "pathRewrite" : {

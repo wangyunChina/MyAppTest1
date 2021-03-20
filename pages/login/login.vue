@@ -49,6 +49,9 @@
 				var code=e.detail.value.code;
 				var mode=this.loginTypeArray[this.loginTypeIndex].type
 				let that=this;
+				uni.showLoading({
+					title:"登陆中...."
+				})
 				uni.request({
 					url:this.BaseProperties.baseUrl+this.BaseProperties.apiLogin,
 					method:"POST",
