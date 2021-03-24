@@ -18,6 +18,7 @@ const apiUserFunctions="/userservice/user/api/v1/get-functions";
 const apiUserChart="/english/english/chart/api/v1/get-user-chart";
 const apiMakeUserRecord="/english/record/api/v1/make-record";
 const apiGetUserRecord="/english/record/api/v1/get-records";
+const apiUserStudyHistory="/english/study/api/v1/study-history"
 var isLogin=false;
 var userSite={
 	cid:"",
@@ -90,6 +91,7 @@ export default {
 	apiUserChart,
 	apiMakeUserRecord,
 	apiGetUserRecord,
+	apiUserStudyHistory,
 	baseUrl,
 	userSite,
 	isLogin,

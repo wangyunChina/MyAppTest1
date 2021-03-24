@@ -112,13 +112,16 @@
 				let mobileNum=this.username;
 				console.log(this.username)
 				if(this.checkPhone()){
+					uni.showLoading({
+						title:"发送中..."
+					})
 					this.BaseProperties.request({
 						url:this.BaseProperties.baseUrl+this.BaseProperties.apiSMSSendCode,
 						data:{
 							"mobile":mobileNum
 						},
 						method:"POST",
-						success:(res)=>{
+						complete:(res)=>{
 							if(res.data.code==200){
 								that.codeSendTimes+=1;
 								that.timerNum=setInterval(that.timer,1000)
