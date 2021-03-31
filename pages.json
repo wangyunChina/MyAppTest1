@@ -1,7 +1,14 @@
 {
 	"pages": [
 		// pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-	
+		{
+		    "path" : "pages/translate/translate",
+			"style": {
+		   	"navigationBarTitleText": "翻译",
+		   	"enablePullDownRefresh":true
+		   }
+		    
+		},
 		{
 			"path": "pages/login/login",
 			"style": {
@@ -390,15 +397,6 @@
 				"navigationBarTitleText": "问题反馈"
 			}
 		}
-	    ,{
-            "path" : "pages/UserInfo/UserInfo",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "我的",
-                "enablePullDownRefresh": false
-            }
-            
-        }
         
         ,{
             "path" : "pages/register/register",
@@ -446,6 +444,7 @@
             }
             
         }
+        
         
     ],
 	"subPackages": [{
@@ -1307,7 +1306,7 @@
 		"pageOrientation": "portrait",
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "Hello uniapp",
-		"navigationBarBackgroundColor": "#000",
+		"navigationBarBackgroundColor": "#007AFF",
 		"backgroundColor": "#F8F8F8",
 		"backgroundColorTop": "#F4F5F6",
 		"backgroundColorBottom": "#F4F5F6",
@@ -1325,6 +1324,12 @@
 				"iconPath": "static/bookChat.png",
 				"selectedIconPath": "static/bookChatSe.png",
 				"text": "书架"
+			},
+			{
+				"pagePath": "pages/translate/translate",
+				"iconPath": "static/translate.png",
+				"selectedIconPath": "static/translate1.png",
+				"text": "翻译在线"
 			},
 			{
 				"pagePath": "pages/UserInfo/UserInfo",

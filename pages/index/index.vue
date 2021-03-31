@@ -40,6 +40,15 @@
 				})
 			},
 			init:function(){
+			if(this.BaseProperties.isLogin==false){
+				uni.navigateTo({
+					url:"../login/login"
+					
+				})
+			}
+				uni.showLoading({
+					title:"加载中..."
+				})
 				let that=this;
 				uni.request({
 					url:this.BaseProperties.baseUrl+this.BaseProperties.apiBookChat,
@@ -47,6 +56,7 @@
 					header:this.BaseProperties.header,
 					method:"POST",
 					success:res=>{
+						uni.hideLoading();
 						console.log("书架请求成功：",JSON.stringify(res))
 						if(res.statusCode===200){
 							let data =  res.data.data;
@@ -59,7 +69,7 @@
 						}
 					},
 					fail:res=>{
-						init();
+						uni.hideLoading();
 					},
 				})
 			}

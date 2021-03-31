@@ -21,7 +21,7 @@
 	export default {
 		data() {
 			return {
-				defaultDays:7,
+				defaultDays:15,
 				tags:[{day:7,msg:"近七天"},{day:15,msg:"近十五天"},{day:30,msg:"近一个月"},{day:90,msg:"近三个月"}],
 				currentTopIndex:-1,
 				hasTop:false,
@@ -32,7 +32,7 @@
 		},
 		methods: {
 			onReady(){
-				this.getServerData(defaultDays,0,0)
+				this.getServerData(this.defaultDays,0,0)
 			},
 			getServerData(userSelectdays,searchMode,userStartDay){
 				let that=this;
@@ -115,7 +115,7 @@ page{
 }
 .posi-fix{
 	position: fixed;
-	top:44px;
+	top:0px;
 	left: 10px;
 }
 .word{

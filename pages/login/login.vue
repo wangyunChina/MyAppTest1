@@ -3,7 +3,7 @@
 		<image class="logo" src="/static/logo.png"></image>
 	
 		<form @submit.prevent="login($event)">
-		<myform label="用 户 名" placeHolder="请输入用户名" name="username" v-model="username"></myform>
+		<myform label="手 机 号" placeHolder="请输入手机号" name="username" v-model="username"></myform>
 		<myform v-show="loginTypeArray[loginTypeIndex].type==1" label="密码" placeHolder="请输入密码" name="password" type="password"></myform>
 		<myform v-show="loginTypeArray[loginTypeIndex].type==2" label="验证码" placeHolder="请输入验证码" name="code" type="text" enableButton="true" :buttonText="codeText" @sendCode="sendCode" v-model="code"></myform>
 		<view style="text-align: center;color: blue;" @click="switchType">{{loginTypeArray[loginTypeIndex].messageZH}}</view>
@@ -62,6 +62,7 @@
 						"mode":mode
 					},
 					success(res) {
+						uni.hideLoading();
 						console.log(res)
 						console.log()
 						if(res.data.code===that.BaseProperties.requestSuccessStatus||res.data.code==that.BaseProperties.loginAgain)
@@ -88,9 +89,14 @@
 								}
 							})
 							
+						}else{
+							uni.showToast({
+								title:res.data.message
+							},3000)
 						}
 					},
 					fail: (failResponse) => {
+						uni.hideLoading();
 						console.log(failResponse)
 						uni.showToast({
 							title:"网络异常",
@@ -122,6 +128,7 @@
 						},
 						method:"POST",
 						complete:(res)=>{
+							uni.hideLoading();
 							if(res.data.code==200){
 								that.codeSendTimes+=1;
 								that.timerNum=setInterval(that.timer,1000)

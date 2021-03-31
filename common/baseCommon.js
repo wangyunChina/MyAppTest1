@@ -2,8 +2,8 @@ const requestSuccessStatus=200;
 const apiTokenInvalid=401;
 const loginAgain=201;//重复登录
 //const baseUrl="http://localhost";
-const staticFilePath="http://localhost";
-const baseUrl="/apis";
+const staticFilePath="http://english.epie-api.top";
+const baseUrl="http://english.epie-api.top";
 const apiLogin="/userservice/user/api/v1/login";
 const apiRegister="/userservice/user/api/v1/register";
 const apiSMSSendCode="/userservice/user/api/open/v1/SMS/send"
@@ -18,7 +18,9 @@ const apiUserFunctions="/userservice/user/api/v1/get-functions";
 const apiUserChart="/english/english/chart/api/v1/get-user-chart";
 const apiMakeUserRecord="/english/record/api/v1/make-record";
 const apiGetUserRecord="/english/record/api/v1/get-records";
-const apiUserStudyHistory="/english/study/api/v1/study-history"
+const apiUserStudyHistory="/english/study/api/v1/study-history";
+const apiVersionCheck="/english/english/app/open/api/v1/check-update";
+const apiTranslate="/english/study/api/open/v1/third/translate?query=";
 var isLogin=false;
 var userSite={
 	cid:"",
@@ -92,6 +94,8 @@ export default {
 	apiMakeUserRecord,
 	apiGetUserRecord,
 	apiUserStudyHistory,
+	apiVersionCheck,
+	apiTranslate,
 	baseUrl,
 	userSite,
 	isLogin,

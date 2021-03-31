@@ -143,8 +143,8 @@
 				uni.request({
 					url: this.BaseProperties.baseUrl+this.BaseProperties.apiUserChart,
 					data: {
-						cid:"8T1YWDEV202102041900214518",
-						days:7
+						cid:this.BaseProperties.header.cid,
+						days:15
 						},
 					method:"POST",
 					header:this.BaseProperties.header,

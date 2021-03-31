@@ -6,7 +6,7 @@
 		<myform label="昵    称" placeHolder="请输入昵称" name="nickName"></myform>
 		<myform label="姓"  name="lastName"></myform>
 		<myform label="名"  name="firstName"></myform>
-		<myform label="用 户 名" placeHolder="请输入用户名" name="username"></myform>
+		<myform label="手 机 号" placeHolder="请输入手机号" name="username"></myform>
 		<myform label="密    码" placeHolder="请输入密码" name="password1" type="password"></myform>
 		<myform label="重复密码" placeHolder="请输入密码" name="password2" type="password"></myform>
 		<button form-type="submit">注册</button>
